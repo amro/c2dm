@@ -18,6 +18,9 @@ module C2DM
                              'Content-length' => "#{post_body.length}"}}
 
       response = Push.post(AUTH_URL, params)
+      
+      raise response if response["Error="]
+      
       response_split = response.body.split("\n")
       @auth_token = response_split[2].gsub("Auth=", "")
     end
