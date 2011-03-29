@@ -40,3 +40,8 @@ pkg
 #
 # For vim:
 #*.swp
+
+bin
+cache
+gems
+specifications
