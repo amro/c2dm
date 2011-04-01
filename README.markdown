@@ -44,7 +44,7 @@ Sending many notifications:
 
 ##Copyrights
 
-* Copyright (c) 2010-2011 Amro Mousa. See LICENSE.txt for details.
+* Copyright (c) 2010-2011 Amro Mousa, Shawn Veader. See LICENSE.txt for details.
 
 ##Other stuff
 
