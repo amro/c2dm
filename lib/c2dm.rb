@@ -58,6 +58,7 @@ class C2DM
   #   :collapse_key => "optional collapse_key string"
   # }
   def send_notification(options)
+    options[:collapse_key] ||= 'foo'
     post_body = build_post_body(options)
 
     params = {
@@ -91,8 +92,6 @@ private
     options.delete(:data).each_pair do |k,v|
       post_body << "data.#{k}=#{CGI::escape(v.to_s)}"
     end
-
-    options[:collapse_key] = 'foo' unless options[:collapse_key]
 
     options.each_pair do |k,v|
       post_body << "#{k}=#{CGI::escape(v.to_s)}"
