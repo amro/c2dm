@@ -12,6 +12,10 @@ class C2DM
   DEFAULT_SOURCE = 'MyCompany-MyAppName-1.0'
 
   def initialize(username, password, source = DEFAULT_SOURCE)
+    auth(username, password, source)
+  end
+
+  def auth(username, password, source)
     post_body = "accountType=HOSTED_OR_GOOGLE&Email=#{username}&Passwd=#{password}&service=ac2dm&source=#{source}"
     params = {
       :body => post_body, 
