@@ -89,9 +89,10 @@ private
     post_body = []
 
     # data attributes need a key in the form of "data.key"...
-    options.delete(:data).each_pair do |k,v|
+    data_attributes = options.delete(:data)
+    data_attributes.each_pair do |k,v|
       post_body << "data.#{k}=#{CGI::escape(v.to_s)}"
-    end
+    end if data_attributes
 
     options.each_pair do |k,v|
       post_body << "#{k}=#{CGI::escape(v.to_s)}"
