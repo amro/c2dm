@@ -9,8 +9,9 @@ class C2DM
 
   AUTH_URL = 'https://www.google.com/accounts/ClientLogin'
   PUSH_URL = 'https://android.apis.google.com/c2dm/send'
+  DEFAULT_SOURCE = 'MyCompany-MyAppName-1.0'
 
-  def initialize(username, password, source = "MyCompany-MyAppName-1.0")
+  def initialize(username, password, source = DEFAULT_SOURCE)
     post_body = "accountType=HOSTED_OR_GOOGLE&Email=#{username}&Passwd=#{password}&service=ac2dm&source=#{source}"
     params = {
       :body => post_body, 
@@ -41,11 +42,13 @@ class C2DM
     options.delete(:data).each_pair do |k,v| 
       post_body << "data.#{k}=#{CGI::escape(v.to_s)}"
     end
-    
+
+    options[:collapse_key] = "foo" unless options[:collapse_key]
+
     options.each_pair do |k,v| 
       post_body << "#{k}=#{CGI::escape(v.to_s)}"
     end
-    
+
     post_body = post_body.join("&")
     params = {
       :body => post_body, 
@@ -58,7 +61,7 @@ class C2DM
     self.class.post(PUSH_URL, params)
   end
 
-  def self.send_notifications(username, password, source, notifications)
+  def self.send_notifications(username, password, notifications, source = DEFAULT_SOURCE)
     c2dm = C2DM.new(username, password, source)
     responses = []
     notifications.each do |notification|
@@ -66,5 +69,4 @@ class C2DM
     end
     responses
   end
-
 end

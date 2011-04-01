@@ -14,16 +14,33 @@ An Android device running 2.2 or newer, its registration token, and a google acc
 
 There are two ways to use c2dm.
 
-Sending an array of notifications:
+Sending many notifications:
+    notifications = [
+      {
+        :registration_id => "...", 
+        :data => {
+          :some_message => "Some payload"
+          :another_message => 10
+        },
+        :collapse_key => "foobar"
+      }
+    ]
+    C2DM.send_notifications("someone@gmail.com", "and_their_password", notifications, "MyCompany-MyApp-1.0.0")
 
-    notifications = [{:registration_id => registration_id2_from_client, :message => "Some awesome message"}]
-    C2DM::Push.send_notifications(your_google_account_id, your_password, "MyCompany-MyApp-1.0", notifications)
+...or one at a time:
+    c2dm = C2DM.new("someone@gmail.com", "and_their_password", "MyCompany-MyApp-1.0")
+    
+    notification = {
+      :registration_id => "...", 
+      :data => {
+        :some_message => "Some payload"
+        :another_message => 10
+      },
+      :collapse_key => "foobar"
+    }
 
-or one at a time:
-
-    c2dm = C2DM::Push.new(your_google_account_id, your_password, "MyCompany-MyApp-1.0")
-    c2dm.send_notification(registration_id2_from_client, "Some awesome message")
+    c2dm.send_notification(notification)
 
 ##Copyrights
 
-* Copyright (c) 2010 Amro Mousa. See LICENSE.txt for details.
+* Copyright (c) 2010-2011 Amro Mousa. See LICENSE.txt for details.
