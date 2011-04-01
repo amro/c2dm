@@ -45,3 +45,7 @@ Sending many notifications:
 ##Copyrights
 
 * Copyright (c) 2010-2011 Amro Mousa. See LICENSE.txt for details.
+
+##Other stuff
+
+* You might want to checkout GroupMe's fork of this gem as well.
