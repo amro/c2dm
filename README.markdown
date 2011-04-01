@@ -48,4 +48,4 @@ Sending many notifications:
 
 ##Other stuff
 
-* You might want to checkout GroupMe's fork of this gem as well.
+You might want to checkout GroupMe's fork of this gem as well.
