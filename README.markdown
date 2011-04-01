@@ -25,6 +25,7 @@ Sending many notifications:
         :collapse_key => "foobar"
       }
     ]
+
     C2DM.send_notifications("someone@gmail.com", "and_their_password", notifications, "MyCompany-MyApp-1.0.0")
 
 ...or one at a time:
