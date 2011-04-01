@@ -22,7 +22,7 @@ Sending many notifications:
           :some_message => "Some payload"
           :another_message => 10
         },
-        :collapse_key => "foobar"
+        :collapse_key => "foobar" #optional
       }
     ]
 
@@ -37,7 +37,7 @@ Sending many notifications:
         :some_message => "Some payload"
         :another_message => 10
       },
-      :collapse_key => "foobar"
+      :collapse_key => "foobar" #optional
     }
 
     c2dm.send_notification(notification)
