@@ -44,7 +44,7 @@ class C2DM
     response = self.class.post(AUTH_URL, params)
 
     # check for authentication failures
-    raise response if response['Error=']
+    raise response.parsed_response if response['Error=']
 
     @auth_token = response.body.split("\n")[2].gsub('Auth=', '')
   end
