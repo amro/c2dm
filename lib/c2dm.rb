@@ -36,6 +36,16 @@ class C2DM
     @auth_token = response.body.split("\n")[2].gsub('Auth=', '')
   end
 
+  def self.send_notifications(auth_token=nil, notifications=[])
+    c2dm = C2DM.new(auth_token)
+    notifications.collect do |notification|
+      {
+        :body => c2dm.send_notification(notification),
+        :registration_id => notification[:registration_id]
+      }
+    end
+  end
+
   def initialize(auth_token=nil)
     @auth_token = auth_token
   end
@@ -62,17 +72,6 @@ class C2DM
     }
 
     self.class.post(PUSH_URL, params)
-  end
-
-  class << self
-    def send_notifications(auth_token=nil, notifications=[])
-      c2dm = C2DM.new(auth_token)
-
-      notifications.collect do |notification|
-        { :body => c2dm.send_notification(notification),
-          :registration_id => notification[:registration_id] }
-      end
-    end
   end
 
   
