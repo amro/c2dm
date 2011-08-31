@@ -5,18 +5,17 @@ class C2DM
   include HTTParty
   default_timeout 30
 
-  attr_accessor :timeout, :username, :password, :source, :access_token
+  attr_accessor :timeout, :username, :password, :source, :auth_token
 
   AUTH_URL = 'https://www.google.com/accounts/ClientLogin'
   PUSH_URL = 'https://android.apis.google.com/c2dm/send'
   DEFAULT_SOURCE = 'MyCompany-MyAppName-1.0'
 
-  def initialize(username=nil, password=nil, source=DEFAULT_SOURCE)
-    @username = username
-    @password = password
-    @source   = source
-
-    authenticate!
+  def initialize(username=nil, password=nil, source=DEFAULT_SOURCE, auth_token=nil)
+    @username   = username
+    @password   = password
+    @source     = source
+    @auth_token = auth_token
   end
 
   def authenticated?
