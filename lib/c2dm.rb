@@ -5,30 +5,18 @@ class C2DM
   include HTTParty
   default_timeout 30
 
-  attr_accessor :timeout, :username, :password, :source, :auth_token
+  attr_accessor :timeout, :auth_token
 
   AUTH_URL = 'https://www.google.com/accounts/ClientLogin'
   PUSH_URL = 'https://android.apis.google.com/c2dm/send'
-  DEFAULT_SOURCE = 'MyCompany-MyAppName-1.0'
 
-  def initialize(username=nil, password=nil, source=DEFAULT_SOURCE, auth_token=nil)
-    @username   = username
-    @password   = password
-    @source     = source
-    @auth_token = auth_token
-  end
-
-  def authenticated?
-    !@auth_token.nil?
-  end
-
-  def authenticate!(username=nil, password=nil, source=nil)
+  def self.authenticate!(username=nil, password=nil, source=nil)
     auth_options = {
       'accountType' => 'HOSTED_OR_GOOGLE',
       'service'     => 'ac2dm',
       'Email'       => username || self.username,
       'Passwd'      => password || self.password,
-      'source'      => source   || self.source
+      'source'      => source   || 'MyCompany-MyAppName-1.0'
     }
     post_body = build_post_body(auth_options)
 
@@ -46,6 +34,10 @@ class C2DM
     raise response.parsed_response if response['Error=']
 
     @auth_token = response.body.split("\n")[2].gsub('Auth=', '')
+  end
+
+  def initialize(auth_token=nil)
+    @auth_token = auth_token
   end
 
   # {
@@ -73,8 +65,8 @@ class C2DM
   end
 
   class << self
-    def send_notifications(username=nil, password=nil, notifications=[], source=nil)
-      c2dm = C2DM.new(username, password, source)
+    def send_notifications(auth_token=nil, notifications=[])
+      c2dm = C2DM.new(auth_token)
 
       notifications.collect do |notification|
         { :body => c2dm.send_notification(notification),
@@ -83,7 +75,10 @@ class C2DM
     end
   end
 
-private
+  
+  private
+  
+  
   def build_post_body(options={})
     post_body = []
 
