@@ -13,13 +13,13 @@ class C2DM
   class << self
     attr_accessor :auth_token
 
-    def authenticate!(username=nil, password=nil, source=nil)
+    def authenticate!(username, password, source = nil)
       auth_options = {
         'accountType' => 'HOSTED_OR_GOOGLE',
         'service'     => 'ac2dm',
-        'Email'       => username || self.username,
-        'Passwd'      => password || self.password,
-        'source'      => source   || 'MyCompany-MyAppName-1.0'
+        'Email'       => username,
+        'Passwd'      => password,
+        'source'      => source || 'MyCompany-MyAppName-1.0'
       }
       post_body = build_post_body(auth_options)
 
