@@ -25,11 +25,13 @@ Sending many notifications:
 	    :collapse_key => "foobar" #optional
 	  }
 	]
-
-	C2DM.send_notifications("someone@gmail.com", "and_their_password", notifications, "MyCompany-MyApp-1.0.0")
+	
+	C2DM.authenticate!("your@googleuser.com", "somepassword", "YourCo-App-1.0.0")
+	C2DM.send_notifications(notifications)
 
 ...or one at a time:
-	c2dm = C2DM.new("someone@gmail.com", "and_their_password", "MyCompany-MyApp-1.0")
+	C2DM.authenticate!("your@googleuser.com", "somepassword", "YourCo-App-1.0.0")
+	c2dm = C2DM.new
 
 	notification = {
 	  :registration_id => "...", 
@@ -42,6 +44,9 @@ Sending many notifications:
 
 	c2dm.send_notification(notification)
 
+Note that calling *authenticate!* will authenticate all new instances of C2DM. You can override this by passing in your own auth_token:
+	c2dm = C2DM.new(auth_token)
+
 ##Copyrights
 
 * Copyright (c) 2010-2012 Amro Mousa, Shawn Veader. See LICENSE.txt for details.
@@ -49,6 +54,7 @@ Sending many notifications:
 ##Thanks
 
 * [Paul Chun](https://github.com/sixofhearts)
+* [gowalla](https://github.com/gowalla)
 
 ##Other stuff
 
