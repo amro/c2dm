@@ -15,36 +15,36 @@ An Android device running 2.2 or newer, its registration token, and a google acc
 There are two ways to use c2dm.
 
 Sending many notifications:
-```notifications = [
-  {
-    :registration_id => "...", 
-    :data => {
-      :some_message => "Some payload"
-      :another_message => 10
-    },
-    :collapse_key => "foobar" #optional
-  }
-]
+	notifications = [
+	  {
+	    :registration_id => "...", 
+	    :data => {
+	      :some_message => "Some payload"
+	      :another_message => 10
+	    },
+	    :collapse_key => "foobar" #optional
+	  }
+	]
 
-C2DM.send_notifications("someone@gmail.com", "and_their_password", notifications, "MyCompany-MyApp-1.0.0")```
+	C2DM.send_notifications("someone@gmail.com", "and_their_password", notifications, "MyCompany-MyApp-1.0.0")
 
 ...or one at a time:
-```c2dm = C2DM.new("someone@gmail.com", "and_their_password", "MyCompany-MyApp-1.0")
+	c2dm = C2DM.new("someone@gmail.com", "and_their_password", "MyCompany-MyApp-1.0")
 
-notification = {
-  :registration_id => "...", 
-  :data => {
-    :some_message => "Some payload",
-    :another_message => 10
-  },
-  :collapse_key => "foobar" #optional
-}
+	notification = {
+	  :registration_id => "...", 
+	  :data => {
+	    :some_message => "Some payload",
+	    :another_message => 10
+	  },
+	  :collapse_key => "foobar" #optional
+	}
 
-c2dm.send_notification(notification)```
+	c2dm.send_notification(notification)
 
 ##Copyrights
 
-* Copyright (c) 2010-2011 Amro Mousa, Shawn Veader. See LICENSE.txt for details.
+* Copyright (c) 2010-2012 Amro Mousa, Shawn Veader. See LICENSE.txt for details.
 
 ##Thanks
 
