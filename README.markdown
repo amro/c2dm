@@ -14,6 +14,8 @@ An Android device running 2.2 or newer, its registration token, and a google acc
 
 There are two ways to use c2dm.
 
+*Important*: Version 0.2.0+ decouples auth from sending so the API changed. Please update your code.
+
 Sending many notifications:
 	notifications = [
 	  {
