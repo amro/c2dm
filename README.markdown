@@ -17,6 +17,7 @@ There are two ways to use c2dm.
 *Important*: Version 0.2.0+ decouples auth from sending so the API changed. Please update your code.
 
 Sending many notifications:
+
 	notifications = [
 	  {
 	    :registration_id => "...", 
@@ -32,6 +33,7 @@ Sending many notifications:
 	C2DM.send_notifications(notifications)
 
 ...or one at a time:
+
 	C2DM.authenticate!("your@googleuser.com", "somepassword", "YourCo-App-1.0.0")
 	c2dm = C2DM.new
 
@@ -47,6 +49,7 @@ Sending many notifications:
 	c2dm.send_notification(notification)
 
 Note that calling *authenticate!* will authenticate all new instances of C2DM. You can override this by passing in your own auth_token:
+
 	c2dm = C2DM.new(auth_token)
 
 ##Copyrights
