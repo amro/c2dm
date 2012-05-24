@@ -8,7 +8,7 @@ class C2DM
   attr_accessor :timeout, :auth_token
 
   AUTH_URL = 'https://www.google.com/accounts/ClientLogin'
-  PUSH_URL = 'http://android.apis.google.com/c2dm/send' # Work around expired/bad SSL cert...
+  PUSH_URL = 'https://android.apis.google.com/c2dm/send'
 
   class << self
     attr_accessor :auth_token
