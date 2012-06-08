@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.version     = "0.2.2"
   s.authors     = ["Amro Mousa"]
   s.email       = ["amromousa@gmail.com"]
-  s.homepage    = ""
+  s.homepage    = "http://github.com/amro/c2dm"
   s.summary     = %q{sends push notifications to Android devices}
   s.description = %q{c2dm sends push notifications to Android devices via google c2dm}
   s.license     = "MIT"
