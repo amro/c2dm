@@ -39,7 +39,8 @@ Sending many individual notifications using a static method:
 
 Sending this way will not raise an error but `send_notifications` will return an array of 
 hashes including the `registration_id` and the `response`. If GCM returns an error while C2DM
-is sending one of the notifications, the response will be an object of type `C2DM::GCMError`.
+is sending one of the notifications, the `response` in the hash of the appropriate notification 
+will be an object of type `C2DM::GCMError`.
 
 ...or one at a time by creating an instance:
 
