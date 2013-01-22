@@ -34,10 +34,9 @@ Sending many individual notifications using a static method:
 	  }
 	]
 	
-  # This initializes all future instances of C2DM with `YourGCMApiKey`
-	C2DM.api_key = "YourGCMApiKey"
+	C2DM.api_key = "YourGCMApiKey" # This initializes all future instances of C2DM with "YourGCMApiKey"
 	C2DM.send_notifications(notifications)
-  
+
 Sending this way will not raise an error but `send_notifications` will return an array of 
 hashes including the `registration_id` and the `response`. If GCM returns an error while C2DM
 is sending one of the notifications, the response will be an object of type `C2DM::GCMError`.
