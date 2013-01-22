@@ -44,16 +44,10 @@ is sending one of the notifications, the response will be an object of type `C2D
 ...or one at a time by creating an instance:
 
 	c2dm = C2DM.new("YourGCMApiKey")
-
-  data = {
-    some_message: "Some payload",
-    another_message: 10
-  }
-  
+	data = {some_message: "Some payload", a_value: 10}
 	collapse_key = "optional_collapse_key"
-
 	c2dm.send_notification("aRegistrationId", data, collapse_key)
-  
+
 Sending using an instance of C2DM will raise a `C2DM::GCMError` error when sending fails.
 
 ##Copyrights
