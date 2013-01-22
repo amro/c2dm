@@ -1,98 +1,83 @@
 require 'httparty'
-require 'cgi'
+require 'json'
 
 class C2DM
   include HTTParty
-  default_timeout 30
+  format :plain
+  default_timeout 10
 
-  attr_accessor :timeout, :auth_token
+  attr_accessor :timeout, :api_key
 
-  AUTH_URL = 'https://www.google.com/accounts/ClientLogin'
-  PUSH_URL = 'https://android.apis.google.com/c2dm/send'
+  GCMError = Class.new(StandardError)
+  API_ENDPOINT = 'https://android.googleapis.com/gcm/send'
 
   class << self
-    attr_accessor :auth_token
+    attr_accessor :api_key
 
-    def authenticate!(username, password, source = nil)
-      auth_options = {
-        'accountType' => 'HOSTED_OR_GOOGLE',
-        'service'     => 'ac2dm',
-        'Email'       => username,
-        'Passwd'      => password,
-        'source'      => source || 'MyCompany-MyAppName-1.0'
-      }
-      post_body = build_post_body(auth_options)
-
-      params = {
-        :body    => post_body,
-        :headers => {
-          'Content-type'   => 'application/x-www-form-urlencoded',
-          'Content-length' => post_body.length.to_s
-        }
-      }
-
-      response = self.post(AUTH_URL, params)
-
-      # check for authentication failures
-      raise response.parsed_response if response['Error=']
-
-      @auth_token = response.body.split("\n")[2].gsub('Auth=', '')
-    end
-
+    # send_notifications([
+    #   {registration_id: "aRegId1", data: {some_message: "hello", a_value: 5}, collapse_key: "optional_collapse_key"},
+    #   {registration_id: "aRegId2", data: {some_message: "weeee", a_value: 1}},
+    #   ...
+    # ])
     def send_notifications(notifications = [])
-      c2dm = C2DM.new(@auth_token)
+      c2dm = C2DM.new(@api_key)
       notifications.collect do |notification|
+        response = nil
+
+        begin
+          response = c2dm.send_notification(notification[:registration_id], notification[:data], notification[:collapse_key])
+        rescue GCMError => e
+          response = e
+        end
+        
         {
-          :body => c2dm.send_notification(notification),
-          :registration_id => notification[:registration_id]
+          "registration_id" => notification[:registration_id],
+          "response" => response
         }
       end
     end
-    
-    def build_post_body(options={})
-      post_body = []
-
-      # data attributes need a key in the form of "data.key"...
-      data_attributes = options.delete(:data)
-      data_attributes.each_pair do |k,v|
-        post_body << "data.#{k}=#{CGI::escape(v.to_s)}"
-      end if data_attributes
-
-      options.each_pair do |k,v|
-        post_body << "#{k}=#{CGI::escape(v.to_s)}"
-      end
-
-      post_body.join('&')
-    end
-    
   end
 
-  def initialize(auth_token = nil)
-    @auth_token = auth_token || self.class.auth_token
+  def initialize(api_key = nil)
+    @api_key = api_key || self.class.api_key
   end
 
-  # {
-  #   :registration_id => "...",
-  #   :data => {
-  #     :some_message => "Hi!", 
-  #     :another_message => 7
-  #   }
-  #   :collapse_key => "optional collapse_key string"
-  # }
-  def send_notification(options)
-    options[:collapse_key] ||= 'foo'
-    post_body = self.class.build_post_body(options)
-
-    params = {
-      :body    => post_body,
-      :headers => {
-        'Authorization'  => "GoogleLogin auth=#{@auth_token}",
-        'Content-type'   => 'application/x-www-form-urlencoded',
-        'Content-length' => "#{post_body.length}"
-      }
+  # send_notification("aRegId...", {some_message: "hello", a_value: 5}, "optional collapse_key")
+  def send_notification(registration_id, data, collapse_key = nil)
+    raise GCMError.new("registration_id must be a String") unless registration_id.is_a?(String)
+    
+    payload = {
+      registration_ids: [registration_id],
+      data: data, 
+      collapse_key: collapse_key
     }
 
-    self.class.post(PUSH_URL, params)
+    parse_response(send(payload))
   end
-
+  
+  private
+  def send(payload)
+    self.class.post(API_ENDPOINT, body: payload.to_json, headers: request_headers)
+  end
+  
+  def request_headers
+    {
+      "Authorization" => "key=#{@api_key}",
+      "Content-Type" => "application/json"
+    }
+  end
+  
+  def parse_response(response)
+    begin
+      parsed_response = JSON.parse(response.body)
+      
+      if (parsed_response["results"].first["error"])
+        raise GCMError.new(parsed_response["results"].first["error"])
+      end
+      
+      parsed_response
+    rescue JSON::ParserError
+      raise GCMError.new(response.body)
+    end
+  end
 end
