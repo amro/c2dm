@@ -1,6 +1,6 @@
 # c2dm
 
-c2dm sends push notifications to Android devices via c2dm sends push notifications to Android devices via [Google Cloud Messaging (GCM)](http://code.google.com/android/c2dm/index.html).
+c2dm sends push notifications to Android devices via [Google Cloud Messaging (GCM)](http://code.google.com/android/c2dm/index.html).
 
 ##Installation
 
