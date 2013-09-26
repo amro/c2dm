@@ -29,7 +29,7 @@ class C2DM
         rescue GCMError => e
           response = e
         end
-        
+
         {
           "registration_id" => notification[:registration_id],
           "response" => response
@@ -45,36 +45,36 @@ class C2DM
   # send_notification("aRegId...", {some_message: "hello", a_value: 5}, "optional collapse_key")
   def send_notification(registration_id, data, collapse_key = nil)
     raise GCMError.new("registration_id must be a String") unless registration_id.is_a?(String)
-    
+
     payload = {
-      registration_ids: [registration_id],
-      data: data, 
-      collapse_key: collapse_key
+      :registration_ids => [registration_id],
+      :data => data,
+      :collapse_key => collapse_key
     }
 
     parse_response(send(payload))
   end
-  
+
   private
   def send(payload)
-    self.class.post(API_ENDPOINT, body: payload.to_json, headers: request_headers)
+    self.class.post(API_ENDPOINT, :body => payload.to_json, :headers => request_headers)
   end
-  
+
   def request_headers
     {
       "Authorization" => "key=#{@api_key}",
       "Content-Type" => "application/json"
     }
   end
-  
+
   def parse_response(response)
     begin
       parsed_response = JSON.parse(response.body)
-      
+
       if (parsed_response["results"].first["error"])
         raise GCMError.new(parsed_response["results"].first["error"])
       end
-      
+
       parsed_response
     rescue JSON::ParserError
       raise GCMError.new(response.body)
